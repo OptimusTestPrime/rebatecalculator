@@ -1,1 +1,388 @@
-#hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontario Substantial Renovation HST Rebate Calculator</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --error-bg: #fef2f2;
+            --error-text: #ef4444;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        /* Stacked Navigation Menu */
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-links a {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .nav-links a.active {
+            background-color: #eff6ff;
+            color: var(--primary-hover);
+            border: 1px solid #dbeafe;
+        }
+
+        .nav-links a:hover {
+            background-color: #eff6ff;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Result Area Styles */
+        #result-area {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .error-message {
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            padding: 1.25rem;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
+            font-weight: 500;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .result-row.total {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--success);
+            border-top: 1px dashed var(--border);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .rule-badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: var(--primary);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Rules Page Styles */
+        .rules-content h2 {
+            font-size: 1.25rem;
+            margin-top: 0;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .rules-content h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .rules-content p {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .rules-content ul {
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .rules-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .rules-content a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .rules-content a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ontario HST Rebate Calculator</h1>
+    
+    <!-- Stacked Navigation -->
+    <div class="nav-links">
+        <a href="#" id="nav-calc" class="active" onclick="switchPage('calculator')">Calculator</a>
+        <a href="#" id="nav-rules" onclick="switchPage('rules')">Eligibility Rules & Reference Guide</a>
+    </div>
+
+    <!-- PAGE 1: Calculator -->
+    <div id="page-calculator">
+        <div class="form-group">
+            <label for="isPrimary">Will this property be your primary place of residence?</label>
+            <select id="isPrimary">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="isSubstantial">Does the project meet the 90% "Substantial Renovation" rule?</label>
+            <select id="isSubstantial">
+                <option value="yes">Yes (At least 90% of interior gutted)</option>
+                <option value="no">No (Partial renovation)</option>
+            </select>
+            <div class="help-text">You must gut and rebuild at least 90% of the non-structural living space.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="startDate">When did/will construction physically begin?</label>
+            <select id="startDate">
+                <option value="after">On or after April 1, 2026</option>
+                <option value="before">Before April 1, 2026</option>
+            </select>
+            <div class="help-text">Determines if you qualify for the expanded 2026-2027 $130,000 rebate limits.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="fmv">Estimated Fair Market Value (FMV) Upon Completion ($)</label>
+            <input type="number" id="fmv" placeholder="e.g., 1200000" min="0">
+            <div class="help-text">The value of the home and land combined after the renovation is done.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="costs">Total Eligible Renovation Costs Before Tax ($)</label>
+            <input type="number" id="costs" placeholder="e.g., 150000" min="0">
+            <div class="help-text">Total materials, labor, and appurtenances (like a detached garage).</div>
+        </div>
+
+        <button onclick="calculateRebate()">Calculate Eligibility & Rebate</button>
+
+        <div id="result-area" style="display: none;"></div>
+    </div>
+
+    <!-- PAGE 2: Rules & Reference -->
+    <div id="page-rules" class="rules-content" style="display: none;">
+        <h2>Reference & Rules Guide</h2>
+        <p>If you are undertaking a major renovation, the Canada Revenue Agency (CRA) provides tax relief to help offset construction costs. The project must meet strict legal definitions.</p>
+
+        <h3>1. The 90% "Substantial Renovation" Threshold</h3>
+        <p>Your project must pass the CRA's 90% test to be treated as a newly constructed home.</p>
+        <ul>
+            <li><strong>The Rule:</strong> At least 90% of the interior must be physically removed or replaced.</li>
+            <li><strong>What Counts:</strong> Livable square footage (main floors, finished basements/attics).</li>
+            <li><strong>What Doesn't Count:</strong> Structural elements (foundation, roof, exterior walls) and unfinished spaces.</li>
+        </ul>
+
+        <h3>2. The Appurtenance Rule (Detached Garages)</h3>
+        <p>If the 90% test is met, the entire residential complex qualifies.</p>
+        <ul>
+            <li><strong>The Rule:</strong> The rebate covers the house, land, and appurtenances.</li>
+            <li><strong>Detached Garages:</strong> Qualify as an appurtenance if built concurrently with the renovation for personal use.</li>
+        </ul>
+
+        <h3>3. The Primary Residence Requirement</h3>
+        <p>Must be for use as the primary place of residence for you or an immediate relation. No secondary/vacation properties.</p>
+
+        <h3>4. Rebate Limits and 2026 Enhanced Rules</h3>
+        <ul>
+            <li><strong>Standard Rules:</strong> Federal GST rebate (max $6,300) phases out at $450k FMV. Ontario Provincial rebate (max $24,000) has no FMV cap.</li>
+            <li><strong>2026 Enhancements:</strong> For projects starting between April 1, 2026, and March 31, 2027, the combined rebate can reach up to $130,000 for homes under $1.5M.</li>
+        </ul>
+
+        <h3>5. Official Resources</h3>
+        <ul>
+            <li><a href="https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4028.html" target="_blank" rel="noopener noreferrer">CRA Guide RC4028</a></li>
+            <li><a href="https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/b-092/substantial-renovations-gst-hst-new-housing-rebate.html" target="_blank" rel="noopener noreferrer">CRA: Substantial Renovation Logic</a></li>
+            <li><a href="https://news.ontario.ca/en/release/1007212/ontario-expanding-hst-rebate-to-lower-the-cost-of-new-homes-in-partnership-with-the-federal-government" target="_blank" rel="noopener noreferrer">2026 Ontario Budget Enhancements</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function switchPage(page) {
+        const calcPage = document.getElementById('page-calculator');
+        const rulesPage = document.getElementById('page-rules');
+        const navCalc = document.getElementById('nav-calc');
+        const navRules = document.getElementById('nav-rules');
+
+        if (page === 'calculator') {
+            calcPage.style.display = 'block';
+            rulesPage.style.display = 'none';
+            navCalc.classList.add('active');
+            navRules.classList.remove('active');
+        } else {
+            calcPage.style.display = 'none';
+            rulesPage.style.display = 'block';
+            navRules.classList.add('active');
+            navCalc.classList.remove('active');
+        }
+    }
+
+    function formatCurrency(val) {
+        return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(val);
+    }
+
+    function calculateRebate() {
+        const isPrimary = document.getElementById('isPrimary').value === 'yes';
+        const isSubstantial = document.getElementById('isSubstantial').value === 'yes';
+        const isAfterApril2026 = document.getElementById('startDate').value === 'after';
+        const fmv = parseFloat(document.getElementById('fmv').value) || 0;
+        const costs = parseFloat(document.getElementById('costs').value) || 0;
+
+        const resultArea = document.getElementById('result-area');
+        resultArea.style.display = 'block';
+
+        let errorMessages = [];
+        if (!isPrimary) errorMessages.push("The property must be used as your primary place of residence.");
+        if (!isSubstantial) errorMessages.push("The project must meet the 90% substantial renovation threshold.");
+        if (fmv <= 0 || costs <= 0) errorMessages.push("Please enter valid, positive amounts for the FMV and Eligible Costs.");
+
+        if (errorMessages.length > 0) {
+            resultArea.innerHTML = `
+                <div class="error-message">
+                    <strong>Disqualified:</strong>
+                    <ul style="margin-top: 0.5rem; margin-bottom: 0; padding-left: 1.5rem;">
+                        ${errorMessages.map(msg => `<li>${msg}</li>`).join('')}
+                    </ul>
+                </div>`;
+            return;
+        }
+
+        const hstPaid = costs * 0.13;
+        const gstPaid = costs * 0.05;
+        const pstPaid = costs * 0.08;
+        
+        let totalRebate = 0;
+        let ruleSetUsed = "";
+
+        if (isAfterApril2026) {
+            ruleSetUsed = "Applying 2026–2027 Enhanced Rules";
+            let maxAvailable = (fmv <= 1500000) ? 130000 : (fmv < 1850000) ? 24000 + 106000 * ((1850000 - fmv) / 350000) : 24000;
+            totalRebate = (fmv >= 1850000) ? Math.min(pstPaid * 0.75, 24000) : Math.min(hstPaid, maxAvailable);
+        } else {
+            ruleSetUsed = "Applying Standard Pre-2026 Rules";
+            let fedRebate = (fmv <= 350000) ? Math.min(gstPaid * 0.36, 6300) : (fmv < 450000) ? Math.min(gstPaid * 0.36, 6300) * ((450000 - fmv) / 100000) : 0;
+            totalRebate = fedRebate + Math.min(pstPaid * 0.75, 24000);
+        }
+
+        resultArea.innerHTML = `
+            <div class="rule-badge">${ruleSetUsed}</div>
+            <div class="result-row"><span>Total HST Paid (13%):</span><span>${formatCurrency(hstPaid)}</span></div>
+            <div class="result-row total"><span>Estimated Total Rebate:</span><span>${formatCurrency(totalRebate)}</span></div>
+            <div class="result-row"><span>Net Tax Burden After Rebate:</span><span>${formatCurrency(hstPaid - totalRebate)}</span></div>
+            <p class="help-text" style="text-align: center; margin-top: 1.5rem;">*Estimates only. Subject to CRA audit and final legislation.</p>
+        `;
+    }
+</script>
+
+</body>
+</html>
+
